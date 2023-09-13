@@ -1,19 +1,23 @@
 package com.amonteiro.a23_11_sparks
 
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.amonteiro.a23_11_sparks.databinding.ActivityWeatherBinding
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.concurrent.thread
 
 class WeatherActivity : AppCompatActivity() {
 
     //IHM
     val binding by lazy { ActivityWeatherBinding.inflate(layoutInflater) }
+
     //Donnée
-    var data:WeatherBean? = null
+    var data: WeatherBean? = null
     var errorMessage = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,30 +36,58 @@ class WeatherActivity : AppCompatActivity() {
             refreshScreen()
 
             //Tache asynchrone
-            thread {
-                try {
-                    //Chercher les données
-                    data = RequestUtils.loadWeather(cityName)
+            versionThread(cityName)
 
-                    //J'actualise sur le thread graphique
-                    runOnUiThread {
-                        refreshScreen()
-                        binding.progressBar.isVisible = false
-                    }
+        }
+    }
+
+    fun versionThread(cityName:String) {
+        thread {
+            try {
+                //Chercher les données
+                data = RequestUtils.loadWeather(cityName)
+
+                //J'actualise sur le thread graphique
+                runOnUiThread {
+                    refreshScreen()
+                    binding.progressBar.isVisible = false
                 }
-                catch (e: Exception) {
-                    e.printStackTrace()
-                    errorMessage = "Une erreur est survenue : ${e.message}"
-                    runOnUiThread {
-                        refreshScreen()
-                        binding.progressBar.isVisible = false
-                    }
+            }
+            catch (e: Exception) {
+                e.printStackTrace()
+                errorMessage = "Une erreur est survenue : ${e.message}"
+                runOnUiThread {
+                    refreshScreen()
+                    binding.progressBar.isVisible = false
                 }
             }
         }
     }
 
-    fun refreshScreen(){
+    fun versionCoroutine(cityName:String) {
+        lifecycleScope.launch(Dispatchers.Default) {
+            //withContext attend que tous les launch termine
+//            withContext(Dispatchers.Default) {
+//                launch {  }
+//                launch {  }
+//            }
+            try {
+                //Chercher les données
+                data = RequestUtils.loadWeather(cityName)
+            }
+            catch (e: Exception) {
+                e.printStackTrace()
+                errorMessage = "Une erreur est survenue : ${e.message}"
+            }
+            //J'actualise sur le thread graphique
+            launch(Dispatchers.Main) {
+                refreshScreen()
+                binding.progressBar.isVisible = false
+            }
+        }
+    }
+
+    fun refreshScreen() {
         //V1
         binding.textView.text = "Il fait ${data?.main?.temp ?: "-"}° à ${data?.name ?: "-"} avec un vent de ${data?.wind?.speed ?: "-"} m/s"
         val imageName = data?.weather?.firstOrNull()?.icon
@@ -65,6 +97,10 @@ class WeatherActivity : AppCompatActivity() {
         else {
             binding.imageView.setImageDrawable(null)
         }
+
+        //Cas d'erreur
+        binding.tvError.text = errorMessage
+        binding.tvError.isVisible = errorMessage.isNotBlank()
 
         //V2
 //        val finalData = data
@@ -82,9 +118,7 @@ class WeatherActivity : AppCompatActivity() {
 //            binding.textView.text = "-"
 //        }
 
-            //Cas d'erreur
-        binding.tvError.text = errorMessage
-        binding.tvError.isVisible = errorMessage.isNotBlank()
+
     }
 
 }

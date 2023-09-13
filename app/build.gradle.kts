@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.amonteiro.a23_11_sparks"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.amonteiro.a23_11_sparks"
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -52,4 +52,9 @@ dependencies {
 
     //Téléchargement d'image
     implementation("com.squareup.picasso:picasso:2.8")
+
+    //Utilisation générale
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:+")
+//LifeCycleScope
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.+")
 }
