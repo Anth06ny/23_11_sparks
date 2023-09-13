@@ -22,11 +22,13 @@ fun toto(data : String){
 data class WeatherBean(
     var name: String,
     var main: TempBean,
-    var wind : WindBean
+    var wind : WindBean,
+    var weather:List<DescriptionBean>?
 )
 
 data class TempBean(var temp: Double)
 data class WindBean(var speed: Double)
+data class DescriptionBean(var icon: String)
 
 /* -------------------------------- */
 // EXO

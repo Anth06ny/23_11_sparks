@@ -15,6 +15,12 @@ object RequestUtils {
     val client = OkHttpClient()
     val gson = Gson()
 
+
+    fun fakeRequest(): String {
+        Thread.sleep(6000)
+        return "Coucou"
+    }
+
     fun loadWeather(city: String): WeatherBean {
        val json =  sendGet("https://api.openweathermap.org/data/2.5/weather?q=$city&appid=b80967f0a6bd10d23e44848547b26550&units=metric&lang=fr")
         return gson.fromJson(json, WeatherBean::class.java)
