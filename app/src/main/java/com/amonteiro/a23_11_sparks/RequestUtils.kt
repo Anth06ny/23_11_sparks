@@ -22,6 +22,7 @@ object RequestUtils {
     }
 
     fun loadWeather(city: String): WeatherBean {
+        Thread.sleep(5000)
        val json =  sendGet("https://api.openweathermap.org/data/2.5/weather?q=$city&appid=b80967f0a6bd10d23e44848547b26550&units=metric&lang=fr")
         return gson.fromJson(json, WeatherBean::class.java)
     }

@@ -19,6 +19,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 
     buildTypes {
@@ -53,8 +54,8 @@ dependencies {
     //Téléchargement d'image
     implementation("com.squareup.picasso:picasso:2.8")
 
-    //Utilisation générale
+    //Coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:+")
-//LifeCycleScope
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.+")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.+")
 }
