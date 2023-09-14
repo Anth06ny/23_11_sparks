@@ -24,6 +24,7 @@ class ExoNavGraphActivity : AppCompatActivity(), MenuProvider {
         addMenuProvider(this)
     }
 
+
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         val navController =  binding.navHostFragment.findNavController()

@@ -56,4 +56,10 @@
         android:layout_height="wrap_content"
         android:text="Load" />
 
+    <Button
+        android:id="@+id/btLoadPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load from my position" />
+
 </LinearLayout>
