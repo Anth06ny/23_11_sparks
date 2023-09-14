@@ -9,6 +9,7 @@ import com.amonteiro.a23_11_sparks.databinding.ActivityMainBinding
 
 
 const val MENU_ID_WEATHER = 1
+const val MENU_ID_FRAGMENT = 2
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,6 +61,7 @@ class MainActivity : AppCompatActivity() {
     //Callback de la création du menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menu.add(0,MENU_ID_WEATHER,0,"Météo")
+        menu.add(0,MENU_ID_FRAGMENT,0,"Fragments")
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -68,6 +70,10 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             MENU_ID_WEATHER -> {
                 val intent = Intent(this, WeatherActivity::class.java)
+                startActivity(intent)
+            }
+            MENU_ID_FRAGMENT -> {
+                val intent = Intent(this, ExoNavGraphActivity::class.java)
                 startActivity(intent)
             }
         }

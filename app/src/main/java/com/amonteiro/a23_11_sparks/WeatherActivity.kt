@@ -31,6 +31,7 @@ class WeatherActivity : AppCompatActivity() {
         binding.btLoad.setOnClickListener {
             val cityName = binding.editText.text.toString()
             model.loadData(cityName)
+
         }
 
         observe()
