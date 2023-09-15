@@ -3,8 +3,10 @@ package com.amonteiro.a23_11_sparks.composeexo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,6 +36,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -54,8 +57,7 @@ class ComposeActivity : ComponentActivity() {
             _23_11_sparksTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    //Greeting()
-                    testRemember()
+                    Greeting()
                 }
             }
         }
@@ -119,7 +121,6 @@ fun testRemember() {
 //Permet d'écouter l'état en dehors de la méthode
 @Composable
 fun MyButton(expanded: MutableState<Boolean> = remember { mutableStateOf(false) }) {
-
     ElevatedButton(
         onClick = { expanded.value = !expanded.value },
     ) {
@@ -129,16 +130,19 @@ fun MyButton(expanded: MutableState<Boolean> = remember { mutableStateOf(false) 
 
 @Composable
 fun Greeting(modifier: Modifier = Modifier) {
+    val searchText = remember { mutableStateOf("") }
+    val filterList = myList.filter { it.text.contains(searchText.value) }
+
     Column(modifier = modifier.padding(8.dp)) {
-        SearchBar()
+        SearchBar(textValue =  searchText)
         Spacer(Modifier.size(8.dp))
         LazyColumn(modifier = Modifier.weight(1F), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(myList.size) {
-                PictureRowItem(data = myList[it])
+            items(filterList.size) {
+                PictureRowItem(data = filterList[it])
             }
         }
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { searchText.value = "" },
             contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
             modifier = Modifier.align(CenterHorizontally)
         ) {
@@ -156,11 +160,12 @@ fun Greeting(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(modifier: Modifier = Modifier) {
-    var toto = "coucou"
+fun SearchBar(modifier: Modifier = Modifier, textValue: MutableState<String>) {
     TextField(
-        value = "",
-        onValueChange = { newValue -> }, //Action
+        value = textValue.value,
+        onValueChange = { newValue ->
+            textValue.value = newValue
+        }, //Action
         leadingIcon = { //Image d'icone
             Icon(
                 imageVector = Icons.Default.Search,
@@ -185,9 +190,15 @@ fun PictureRowItem(
     modifier: Modifier = Modifier,
     data: PictureData
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
+    val displayedText = if (isExpanded) data.longText else (data.longText.take(20) + "...")
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.background(Color.Gray)
+            .clickable {
+                isExpanded = !isExpanded
+            }
     ) {
         GlideImage(
             model = data.url,
@@ -209,11 +220,10 @@ fun PictureRowItem(
             )
 
             Text(
-                text = data.longText.take(20) + "...",
+                text = displayedText,
                 fontSize = 14.sp,
-                lineHeight = 116.sp, //hauteur
-                textAlign = TextAlign.Center,
                 color = Color.Blue,
+                modifier = Modifier.animateContentSize()
             )
         }
     }
