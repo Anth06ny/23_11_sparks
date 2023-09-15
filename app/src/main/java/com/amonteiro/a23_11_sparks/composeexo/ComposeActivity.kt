@@ -130,7 +130,9 @@ fun MyButton(expanded: MutableState<Boolean> = remember { mutableStateOf(false) 
 
 @Composable
 fun Greeting(modifier: Modifier = Modifier) {
+    //Variable ou les composants vont venir se lié grâce aux remember
     val searchText = remember { mutableStateOf("") }
+    //Sera recalculé à chaque actualisation
     val filterList = myList.filter { it.text.contains(searchText.value) }
 
     Column(modifier = modifier.padding(8.dp)) {
