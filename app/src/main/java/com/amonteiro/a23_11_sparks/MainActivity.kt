@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.amonteiro.a23_11_sparks.composeexo.ComposeActivity
 import com.amonteiro.a23_11_sparks.databinding.ActivityMainBinding
 
 
 const val MENU_ID_WEATHER = 1
 const val MENU_ID_FRAGMENT = 2
+const val MENU_ID_COMPOSE = 3
 
 class MainActivity : AppCompatActivity() {
 
@@ -62,6 +64,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menu.add(0,MENU_ID_WEATHER,0,"Météo")
         menu.add(0,MENU_ID_FRAGMENT,0,"Fragments")
+        menu.add(0,MENU_ID_COMPOSE,0,"Compose")
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -74,6 +77,10 @@ class MainActivity : AppCompatActivity() {
             }
             MENU_ID_FRAGMENT -> {
                 val intent = Intent(this, ExoNavGraphActivity::class.java)
+                startActivity(intent)
+            }
+            MENU_ID_COMPOSE -> {
+                val intent = Intent(this, ComposeActivity::class.java)
                 startActivity(intent)
             }
         }

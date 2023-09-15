@@ -3,6 +3,7 @@ package com.amonteiro.a23_11_sparks
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -25,6 +26,7 @@ class WeatherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
 
         //callback du click
         binding.btLoad.setOnClickListener {
